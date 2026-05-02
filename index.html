@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MovieHub - Streaming gratuit</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0A0C10;
+            font-family: 'Inter', sans-serif;
+            color: #EDEDED;
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1A1D24;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF4D4D;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FF4D4D, #FFB347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            color: #FF4D4D;
+            background: none;
+            -webkit-background-clip: unset;
+        }
+
+        .hero {
+            padding: 60px 0 48px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 58px;
+            font-weight: 800;
+            background: linear-gradient(to right, #FFFFFF, #FF9A5A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        .hero p {
+            font-size: 20px;
+            color: #A1A5B0;
+            margin-top: 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 77, 77, 0.15);
+            backdrop-filter: blur(4px);
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            color: #FF8A8A;
+        }
+
+        .search-section {
+            margin: 40px 0 30px;
+        }
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            background: #14171F;
+            border-radius: 60px;
+            padding: 6px 6px 6px 24px;
+            align-items: center;
+            border: 1px solid #2A2E38;
+        }
+        .search-bar i {
+            color: #FF4D4D;
+        }
+        .search-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 16px 0;
+            font-size: 16px;
+            color: white;
+            outline: none;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 48px 0 24px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title i {
+            color: #FF4D4D;
+            font-size: 28px;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+        .movie-card {
+            background: #12141C;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            border: 1px solid #23262E;
+            backdrop-filter: blur(2px);
+        }
+        .movie-card:hover {
+            transform: translateY(-8px);
+            border-color: #FF4D4D80;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.6);
+        }
+        .movie-poster {
+            width: 100%;
+            height: 360px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 12px;
+        }
+        .movie-year {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .movie-info {
+            padding: 20px;
+        }
+        .movie-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .movie-desc {
+            font-size: 13px;
+            color: #9A9EA8;
+            line-height: 1.45;
+            margin: 12px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .btn-watch, .btn-download {
+            flex: 1;
+            padding: 10px 0;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-watch {
+            background: #FF4D4D;
+            color: white;
+        }
+        .btn-watch:hover {
+            background: #E03E3E;
+        }
+        .btn-download {
+            background: #2A2E3C;
+            color: #DDD;
+        }
+        .btn-download:hover {
+            background: #3A3F50;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: #181C26;
+            max-width: 480px;
+            width: 90%;
+            border-radius: 40px;
+            padding: 32px 28px;
+            text-align: center;
+            border: 1px solid #FF4D4D40;
+            animation: fadeUp 0.25s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .modal-content i {
+            font-size: 54px;
+            color: #FFB347;
+            margin-bottom: 16px;
+        }
+        .modal-content h3 {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+        .modal-content p {
+            color: #B9BDC7;
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+        .cpa-note {
+            background: #0F1119;
+            padding: 14px;
+            border-radius: 28px;
+            font-size: 13px;
+            margin: 20px 0;
+            border-left: 4px solid #FF4D4D;
+            text-align: left;
+        }
+        .survey-btn {
+            background: #FF4D4D;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 8px;
+        }
+        .survey-btn:hover {
+            background: #ff6a6a;
+        }
+        .close-modal {
+            background: transparent;
+            border: 1px solid #3E4250;
+            padding: 12px;
+            border-radius: 40px;
+            width: 100%;
+            margin-top: 12px;
+            color: white;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #0B0D12;
+            margin-top: 80px;
+            padding: 48px 0 32px;
+            border-top: 1px solid #20232B;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 32px;
+        }
+        .footer-col p {
+            color: #969AA5;
+            max-width: 280px;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+        .footer-col h4 {
+            margin-bottom: 16px;
+            font-size: 18px;
+        }
+        .footer-col a {
+            color: #A0A4B0;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            font-size: 13px;
+            color: #5F6472;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 38px; }
+            .container { padding: 0 20px; }
+            .movies-grid { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav>
+        <div class="logo">🎬 Movie<span>Hub</span></div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">Streaming 100% gratuit</div>
+        <h1>Bienvenue sur MovieHub</h1>
+        <p>Les meilleures séries & films en illimité. Pas d'abonnement, pas de carte bancaire.<br> Profitez de vos contenus préférés instantanément.</p>
+    </section>
+
+    <div class="search-section">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Rechercher un film, une série... (ex: Stranger, Dark, Squid)">
+        </div>
+    </div>
+
+    <div class="section-title">
+        <i class="fas fa-fire-flame"></i> 
+        <span>À l'affiche & séries populaires</span>
+    </div>
+    <div id="moviesContainer" class="movies-grid"></div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3 style="font-weight:800;">MovieHub</h3>
+                <p>Plateforme de streaming 100% légale (contenus promotionnels). Accédez à des milliers d'heures de divertissement.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Liens</h4>
+                <a href="#">Conditions d'utilisation</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Notre modèle</h4>
+                <p style="font-size:13px;">MovieHub est entièrement GRATUIT sans abonnement. Grâce aux offres partenaires (sondages CPA), nous sommes rémunérés à chaque fois qu'un utilisateur effectue un sondage. Les sondages prennent moins de 30 secondes. Grâce à ces sondages nous pouvons garder le site entièrement gratuit.</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 MovieHub – Tous droits réservés. Le contenu est présenté à titre informatif.
+        </div>
+    </div>
+</footer>
+
+<div id="cpaModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-lock"></i>
+        <h3>Sondage requis</h3>
+        <p>Pour <strong id="pendingActionLabel">regarder</strong> « <span id="pendingMovieTitle"></span> », veuillez compléter un sondage rapide.</p>
+        <div class="cpa-note">
+            <strong>Pourquoi un sondage ?</strong><br>
+            MovieHub est entièrement GRATUIT sans abonnement. Grâce aux offres partenaires (sondages CPA), nous sommes rémunérés à chaque fois qu'un utilisateur effectue un sondage. Les sondages prennent moins de 30 secondes. Grâce à ces sondages nous pouvons garder le site entièrement gratuit.
+        </div>
+        <button class="survey-btn" id="completeSurveyBtn">Effectuer un sondage</button>
+        <button class="close-modal" id="closeModalBtn">Fermer</button>
+    </div>
+</div>
+
+<script>
+    // Movies data with YOUR real images - Michael (2026) added in 5th position
+    let moviesData = [
+        {
+            id: 1,
+            title: "Stranger Things (Saison 4)",
+            year: "2022",
+            description: "À Hawkins, des phénomènes surnaturels menacent la ville. Eleven et ses amis affrontent le redoutable Vecna. Suspense et nostalgie 80's.",
+            poster: "https://i.postimg.cc/sXS5Kqj2/images-(38).jpg"
+        },
+        {
+            id: 2,
+            title: "The Last of Us",
+            year: "2023",
+            description: "Dans un monde post-apocalyptique, Joel doit protéger Ellie, une adolescente immunisée contre le champignon ravageur.",
+            poster: "https://i.postimg.cc/C1HzRgM4/ems-c-HJk-LWVtcy1hc3Nld-HMvd-HZz-ZWFzb24v-Zj-U3YTRl-Yj-It-OTAz-NC00Mz-Fj-LTg0NGQt-ODA1ZGU2OWY1Nz-Y1L.jpg"
+        },
+        {
+            id: 3,
+            title: "Dark",
+            year: "2017",
+            description: "Une mystérieuse disparition d'enfant dévoile les secrets de quatre familles à travers le temps. Chef-d'œuvre allemand.",
+            poster: "https://i.postimg.cc/FFTH8GYX/MV5BYTUx-ZGIz-Zj-It-MTEz-NC00YTNl-LWEw-ZTIt-Mz-Fh-Nz-E4Zjk0Yz-Ew-Xk-Ey-Xk-Fqc-Gc-V1-FMjpg-UX1000.jpg"
+        },
+        {
+            id: 4,
+            title: "Wednesday",
+            year: "2022",
+            description: "Wednesday Addams enquête sur une série de meurtres à Nevermore Academy. Comédie noire et mystère.",
+            poster: "https://i.postimg.cc/hjSK37gt/ems-c-HJk-LWVtcy1hc3Nld-HMvd-HZz-ZXJp-ZXMv-Mzc2Nm-Ni-Ym-Yt-OTFh-NC00OThl-LTk0MDMt-OWJl-Yzdh-Nz-I3Mj.jpg"
+        },
+        {
+            id: 5,
+            title: "Michael (2026)",
+            year: "2026",
+            description: "Biopic sur la légende de la musique Michael Jackson. Découvrez les coulisses de sa vie, son génie artistique et son héritage intemporel.",
+            poster: "https://i.postimg.cc/7ZF6X6fC/MV5BNzll-Nm-Rl-N2Et-MDQy-OC00ODJj-LTg4OWQt-ZDNm-NGU3Yzlk-Njc1Xk-Ey-Xk-Fqc-Gc-V1.jpg"
+        },
+        {
+            id: 6,
+            title: "The Witcher",
+            year: "2019",
+            description: "Geralt de Riv, un chasseur de monstres mutant, lutte pour trouver sa place dans un monde où les humains sont souvent plus mauvais que les bêtes.",
+            poster: "https://i.postimg.cc/ZK94gmk5/p17580186-i-v9-ad.jpg"
+        },
+        {
+            id: 7,
+            title: "Breaking Bad",
+            year: "2008",
+            description: "Un professeur de chimie diagnostiqué d'un cancer se lance dans la production de méthamphétamine pour assurer l'avenir de sa famille.",
+            poster: "https://i.postimg.cc/g0KWRkhg/MV5BMz-U5ZGYz-Nm-Qt-MTdh-Yy00OGRi-LTg0Nm-Qt-Yj-Vj-Nzli-ZTg1ZGE4Xk-Ey-Xk-Fqc-Gc-V1-FMjpg-UX1000.jpg"
+        },
+        {
+            id: 8,
+            title: "Inception",
+            year: "2010",
+            description: "Un voleur qui pénètre les rêves des gens pour y dérober leurs secrets se voit offrir une dernière mission presque impossible.",
+            poster: "https://i.postimg.cc/D0RkFWVX/inception-movie-poster.jpg"
+        },
+        {
+            id: 9,
+            title: "Money Heist (La Casa de Papel)",
+            year: "2017",
+            description: "Huit voleurs font une prise d'otages dans la Maison Royale de la Monnaie d'Espagne, tandis que le cerveau manipule la police.",
+            poster: "https://i.postimg.cc/G2pZyPdp/Money-Heist-La-Casa-De-Papel-TV-Show-Poster-Guerra-War-Size-24-X-36-183ce085-097d-4d17-b927-d23a2541.jpg"
+        },
+        {
+            id: 10,
+            title: "The Boys",
+            year: "2019",
+            description: "Une équipe de justiciers aux méthodes brutales affronte des super-héros corrompus et dangereux manipulés par une puissante entreprise.",
+            poster: "https://i.postimg.cc/j2p9mGN1/1233070-the-boys-saison-5-affiche.jpg"
+        }
+    ];
+
+    let pendingAction = { movie: null, actionType: null };
+
+    function renderMovies(filterText = "") {
+        const container = document.getElementById('moviesContainer');
+        if (!container) return;
+        let filtered = [...moviesData];
+        if (filterText.trim() !== "") {
+            const lowerFilter = filterText.toLowerCase();
+            filtered = moviesData.filter(m => m.title.toLowerCase().includes(lowerFilter));
+        }
+        if (filtered.length === 0) {
+            container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:60px;">🎞️ Aucun résultat pour "${filterText}"</div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map(movie => `
+            <div class="movie-card" data-id="${movie.id}">
+                <div class="movie-poster" style="background-image: linear-gradient(0deg, #0A0C10 0%, transparent 70%), url('${movie.poster}'); background-size: cover;">
+                    <span class="movie-year"><i class="far fa-calendar-alt"></i> ${movie.year}</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">${movie.title}</div>
+                    <div class="movie-desc">${movie.description.substring(0, 100)}${movie.description.length > 100 ? '...' : ''}</div>
+                    <div class="btn-group">
+                        <button class="btn-watch" data-id="${movie.id}" data-action="watch"><i class="fas fa-play"></i> Regarder</button>
+                        <button class="btn-download" data-id="${movie.id}" data-action="download"><i class="fas fa-download"></i> Télécharger</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.btn-watch').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const movieId = parseInt(btn.getAttribute('data-id'));
+                const movie = moviesData.find(m => m.id === movieId);
+                if (movie) openCPAModal(movie, 'watch');
+            });
+        });
+        document.querySelectorAll('.btn-download').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const movieId = parseInt(btn.getAttribute('data-id'));
+                const movie = moviesData.find(m => m.id === movieId);
+                if (movie) openCPAModal(movie, 'download');
+            });
+        });
+    }
+
+    function openCPAModal(movie, actionType) {
+        pendingAction.movie = movie;
+        pendingAction.actionType = actionType;
+        const modal = document.getElementById('cpaModal');
+        const pendingTitleSpan = document.getElementById('pendingMovieTitle');
+        const actionLabelSpan = document.getElementById('pendingActionLabel');
+        if (pendingTitleSpan) pendingTitleSpan.innerText = movie.title;
+        if (actionLabelSpan) actionLabelSpan.innerText = (actionType === 'watch' ? 'regarder' : 'télécharger');
+        modal.style.display = 'flex';
+    }
+
+    function completeSurveyAndUnlock() {
+        if (!pendingAction.movie) return;
+        const movieTitle = pendingAction.movie.title;
+        const action = pendingAction.actionType;
+        
+        closeModal();
+        
+        if (action === 'watch') {
+            alert(`Sondage validé ! Vous pouvez maintenant regarder "${movieTitle}".\n(Redirection vers le player — site partenaire simulé)`);
+        } else if (action === 'download') {
+            alert(`Sondage validé ! Téléchargement de "${movieTitle}" autorisé.\nMerci d'avoir complété l'offre CPA, cela nous soutient !`);
+            const fakeLink = document.createElement('a');
+            fakeLink.href = `#download-simule-${pendingAction.movie.id}`;
+            fakeLink.download = `${movieTitle}.mp4`;
+            fakeLink.click();
+        }
+        pendingAction.movie = null;
+        pendingAction.actionType = null;
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('cpaModal');
+        modal.style.display = 'none';
+    }
+
+    document.getElementById('completeSurveyBtn')?.addEventListener('click', () => {
+        if (pendingAction.movie) {
+            completeSurveyAndUnlock();
+        } else {
+            closeModal();
+        }
+    });
+    document.getElementById('closeModalBtn')?.addEventListener('click', () => {
+        closeModal();
+        pendingAction.movie = null;
+    });
+    window.addEventListener('click', (e) => {
+        const modal = document.getElementById('cpaModal');
+        if (e.target === modal) {
+            closeModal();
+            pendingAction.movie = null;
+        }
+    });
+
+    function performSearch() {
+        const searchVal = document.getElementById('searchInput').value;
+        renderMovies(searchVal);
+    }
+    document.getElementById('searchInput')?.addEventListener('input', performSearch);
+
+    renderMovies();
+</script>
+</body>
+</html>
