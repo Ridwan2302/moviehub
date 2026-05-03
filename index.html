@@ -161,7 +161,7 @@
             justify-content: flex-start;
             padding: 12px;
         }
-        .movie-year {
+        .movie-duration {
             background: rgba(0,0,0,0.7);
             backdrop-filter: blur(8px);
             padding: 4px 12px;
@@ -243,11 +243,6 @@
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px);}
             to { opacity: 1; transform: translateY(0);}
-        }
-        .modal-content i {
-            font-size: 54px;
-            color: #FFB347;
-            margin-bottom: 16px;
         }
         .modal-content h3 {
             font-size: 28px;
@@ -358,8 +353,8 @@
     </div>
 
     <div class="section-title">
-        <i class="fas fa-fire-flame"></i> 
-        <span>À l'affiche & séries populaires</span>
+        <i class="fas fa-hourglass-half"></i> 
+        <span>Sondage 30sec requis</span>
     </div>
     <div id="moviesContainer" class="movies-grid"></div>
 </div>
@@ -390,12 +385,11 @@
 
 <div id="cpaModal" class="modal">
     <div class="modal-content">
-        <i class="fas fa-lock"></i>
         <h3>Sondage requis</h3>
-        <p>Pour <strong id="pendingActionLabel">regarder</strong> « <span id="pendingMovieTitle"></span> », veuillez compléter un sondage rapide.</p>
+        <p>Pour <strong id="pendingActionLabel">regarder</strong> « <span id="pendingMovieTitle"></span> », veuillez compléter un sondage de 30sec.</p>
         <div class="cpa-note">
-            <strong>Pourquoi un sondage ?</strong><br>
-            MovieHub est entièrement GRATUIT sans abonnement. Grâce aux offres partenaires (sondages CPA), nous sommes rémunérés à chaque fois qu'un utilisateur effectue un sondage. Les sondages prennent moins de 30 secondes. Grâce à ces sondages nous pouvons garder le site entièrement gratuit.
+            <strong>Pourquoi effectuer un sondage ?</strong><br>
+            MovieHub est entièrement GRATUIT sans abonnement. Grâce aux offres partenaires, nous sommes rémunérés à chaque fois que vous effectuez un sondage. Les sondages prennent moins de 30 secondes, et grâce à ces sondages nous pouvons garder le site entièrement gratuit pour tous les participants, merci.
         </div>
         <button class="survey-btn" id="completeSurveyBtn">Effectuer un sondage</button>
         <button class="close-modal" id="closeModalBtn">Fermer</button>
@@ -403,81 +397,89 @@
 </div>
 
 <script>
-    // Movies data with YOUR real images - Michael (2026) added in 5th position
+    // Movies data with Sinners added in 8th position
     let moviesData = [
         {
             id: 1,
             title: "Stranger Things (Saison 4)",
-            year: "2022",
+            duration: "9 épisodes • ~1h15",
             description: "À Hawkins, des phénomènes surnaturels menacent la ville. Eleven et ses amis affrontent le redoutable Vecna. Suspense et nostalgie 80's.",
             poster: "https://i.postimg.cc/sXS5Kqj2/images-(38).jpg"
         },
         {
             id: 2,
             title: "The Last of Us",
-            year: "2023",
+            duration: "9 épisodes • ~55min",
             description: "Dans un monde post-apocalyptique, Joel doit protéger Ellie, une adolescente immunisée contre le champignon ravageur.",
             poster: "https://i.postimg.cc/C1HzRgM4/ems-c-HJk-LWVtcy1hc3Nld-HMvd-HZz-ZWFzb24v-Zj-U3YTRl-Yj-It-OTAz-NC00Mz-Fj-LTg0NGQt-ODA1ZGU2OWY1Nz-Y1L.jpg"
         },
         {
             id: 3,
             title: "Dark",
-            year: "2017",
+            duration: "26 épisodes • ~58min",
             description: "Une mystérieuse disparition d'enfant dévoile les secrets de quatre familles à travers le temps. Chef-d'œuvre allemand.",
             poster: "https://i.postimg.cc/FFTH8GYX/MV5BYTUx-ZGIz-Zj-It-MTEz-NC00YTNl-LWEw-ZTIt-Mz-Fh-Nz-E4Zjk0Yz-Ew-Xk-Ey-Xk-Fqc-Gc-V1-FMjpg-UX1000.jpg"
         },
         {
             id: 4,
             title: "Wednesday",
-            year: "2022",
+            duration: "8 épisodes • ~50min",
             description: "Wednesday Addams enquête sur une série de meurtres à Nevermore Academy. Comédie noire et mystère.",
             poster: "https://i.postimg.cc/hjSK37gt/ems-c-HJk-LWVtcy1hc3Nld-HMvd-HZz-ZXJp-ZXMv-Mzc2Nm-Ni-Ym-Yt-OTFh-NC00OThl-LTk0MDMt-OWJl-Yzdh-Nz-I3Mj.jpg"
         },
         {
             id: 5,
             title: "Michael (2026)",
-            year: "2026",
+            duration: "2h 15min",
             description: "Biopic sur la légende de la musique Michael Jackson. Découvrez les coulisses de sa vie, son génie artistique et son héritage intemporel.",
             poster: "https://i.postimg.cc/7ZF6X6fC/MV5BNzll-Nm-Rl-N2Et-MDQy-OC00ODJj-LTg4OWQt-ZDNm-NGU3Yzlk-Njc1Xk-Ey-Xk-Fqc-Gc-V1.jpg"
         },
         {
             id: 6,
             title: "The Witcher",
-            year: "2019",
+            duration: "24 épisodes • ~60min",
             description: "Geralt de Riv, un chasseur de monstres mutant, lutte pour trouver sa place dans un monde où les humains sont souvent plus mauvais que les bêtes.",
             poster: "https://i.postimg.cc/ZK94gmk5/p17580186-i-v9-ad.jpg"
         },
         {
             id: 7,
             title: "Breaking Bad",
-            year: "2008",
+            duration: "62 épisodes • ~47min",
             description: "Un professeur de chimie diagnostiqué d'un cancer se lance dans la production de méthamphétamine pour assurer l'avenir de sa famille.",
             poster: "https://i.postimg.cc/g0KWRkhg/MV5BMz-U5ZGYz-Nm-Qt-MTdh-Yy00OGRi-LTg0Nm-Qt-Yj-Vj-Nzli-ZTg1ZGE4Xk-Ey-Xk-Fqc-Gc-V1-FMjpg-UX1000.jpg"
         },
         {
             id: 8,
+            title: "Sinners",
+            duration: "2h 20min",
+            description: "Un thriller psychologique intense où les péchés du passé refont surface. Entre mystère, rédemption et suspense haletant.",
+            poster: "https://i.postimg.cc/k5Rz6sxs/fqn-K7Zr8a0dr-Lbz-Pa-WXMSVFFCs-Q.jpg"
+        },
+        {
+            id: 9,
             title: "Inception",
-            year: "2010",
+            duration: "2h 28min",
             description: "Un voleur qui pénètre les rêves des gens pour y dérober leurs secrets se voit offrir une dernière mission presque impossible.",
             poster: "https://i.postimg.cc/D0RkFWVX/inception-movie-poster.jpg"
         },
         {
-            id: 9,
+            id: 10,
             title: "Money Heist (La Casa de Papel)",
-            year: "2017",
+            duration: "41 épisodes • ~50min",
             description: "Huit voleurs font une prise d'otages dans la Maison Royale de la Monnaie d'Espagne, tandis que le cerveau manipule la police.",
             poster: "https://i.postimg.cc/G2pZyPdp/Money-Heist-La-Casa-De-Papel-TV-Show-Poster-Guerra-War-Size-24-X-36-183ce085-097d-4d17-b927-d23a2541.jpg"
         },
         {
-            id: 10,
+            id: 11,
             title: "The Boys",
-            year: "2019",
+            duration: "32 épisodes • ~60min",
             description: "Une équipe de justiciers aux méthodes brutales affronte des super-héros corrompus et dangereux manipulés par une puissante entreprise.",
             poster: "https://i.postimg.cc/j2p9mGN1/1233070-the-boys-saison-5-affiche.jpg"
         }
     ];
 
     let pendingAction = { movie: null, actionType: null };
+    const CPA_LINK = "https://authenticateapp.online/cl/i/34lrr7";
 
     function renderMovies(filterText = "") {
         const container = document.getElementById('moviesContainer');
@@ -495,7 +497,7 @@
         container.innerHTML = filtered.map(movie => `
             <div class="movie-card" data-id="${movie.id}">
                 <div class="movie-poster" style="background-image: linear-gradient(0deg, #0A0C10 0%, transparent 70%), url('${movie.poster}'); background-size: cover;">
-                    <span class="movie-year"><i class="far fa-calendar-alt"></i> ${movie.year}</span>
+                    <span class="movie-duration"><i class="far fa-clock"></i> ${movie.duration}</span>
                 </div>
                 <div class="movie-info">
                     <div class="movie-title">${movie.title}</div>
@@ -537,24 +539,29 @@
         modal.style.display = 'flex';
     }
 
-    function completeSurveyAndUnlock() {
+    function redirectToCPAAndUnlock() {
         if (!pendingAction.movie) return;
-        const movieTitle = pendingAction.movie.title;
-        const action = pendingAction.actionType;
         
-        closeModal();
+        window.open(CPA_LINK, '_blank');
         
-        if (action === 'watch') {
-            alert(`Sondage validé ! Vous pouvez maintenant regarder "${movieTitle}".\n(Redirection vers le player — site partenaire simulé)`);
-        } else if (action === 'download') {
-            alert(`Sondage validé ! Téléchargement de "${movieTitle}" autorisé.\nMerci d'avoir complété l'offre CPA, cela nous soutient !`);
-            const fakeLink = document.createElement('a');
-            fakeLink.href = `#download-simule-${pendingAction.movie.id}`;
-            fakeLink.download = `${movieTitle}.mp4`;
-            fakeLink.click();
-        }
-        pendingAction.movie = null;
-        pendingAction.actionType = null;
+        setTimeout(() => {
+            const movieTitle = pendingAction.movie.title;
+            const action = pendingAction.actionType;
+            
+            if (action === 'watch') {
+                alert(`Sondage validé ! Vous pouvez maintenant regarder "${movieTitle}".\n(Redirection vers le player — site partenaire simulé)`);
+            } else if (action === 'download') {
+                alert(`Sondage validé ! Téléchargement de "${movieTitle}" autorisé.\nMerci d'avoir complété l'offre CPA, cela nous soutient !`);
+                const fakeLink = document.createElement('a');
+                fakeLink.href = `#download-simule-${pendingAction.movie.id}`;
+                fakeLink.download = `${movieTitle}.mp4`;
+                fakeLink.click();
+            }
+            
+            pendingAction.movie = null;
+            pendingAction.actionType = null;
+            closeModal();
+        }, 500);
     }
 
     function closeModal() {
@@ -564,15 +571,17 @@
 
     document.getElementById('completeSurveyBtn')?.addEventListener('click', () => {
         if (pendingAction.movie) {
-            completeSurveyAndUnlock();
+            redirectToCPAAndUnlock();
         } else {
             closeModal();
         }
     });
+    
     document.getElementById('closeModalBtn')?.addEventListener('click', () => {
         closeModal();
         pendingAction.movie = null;
     });
+    
     window.addEventListener('click', (e) => {
         const modal = document.getElementById('cpaModal');
         if (e.target === modal) {
